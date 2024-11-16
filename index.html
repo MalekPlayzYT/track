@@ -3,101 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noobs Battle Ground Stats</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Game Update Loading Screen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e2a47, #233d63);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        .loading-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            background-color: #4f5b66;
+            width: 100%;
+            height: 12px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            position: relative;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress {
+            background-color: #00b894;
+            height: 100%;
+            width: 0%;
+            border-radius: 50px;
+            transition: width 1s ease;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .status-text {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .status-message {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            color: orange;
+        }
+
+        .status-completed {
+            color: #27ae60;
+        }
+
+        .action-button {
+            background-color: #00b894;
+            color: white;
+            padding: 12px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-button:hover {
+            background-color: #019c79;
+        }
+
+    </style>
 </head>
 <body>
-    <div class="sidebar">
-        <ul>
-            <li onclick="showSection('home')">
-                <img src="home_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png" alt="Home Icon">
-                <span></span>
-            </li>
-            <li onclick="showSection('stats')">
-                <img src="person_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png" alt="Stats Icon">
-                <span></span>
-            </li>
-            <li onclick="showSection('leaks')">
-                <img src="visibility_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png" alt="Leaks Icon">
-                <span></span>
-            </li>
-            <li onclick="showSection('leaderboard')">
-                <img src="leaderboard_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png" alt="Leaderboard Icon">
-                <span></span>
-            </li>
-            <li onclick="logout()">
-                <img src="logout_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png" alt="Logout Icon">
-                <span></span>
-            </li>
-        </ul>
-    </div>
-
-    <div id="login" class="content-section" style="display: block;">
-        <h2>Login</h2>
-        <input type="password" id="username" placeholder="Enter your password">
-        <button id="loginBtn">Login</button>
-    </div>
-
-    <div id="home" class="content-section" style="display: none;">
-        <h2>Welcome to the Game Stats Portal</h2>
-        <p>This portal allows you to track your in-game stats, upcoming events, and leaked weapons.</p>
-        <div class="card-container">
-            <div class="card" style="background-color: #ff4d4d;" onclick="showSection('stats')">
-                <h3>My Stats</h3>
-                <p>Check your in-game kills, playtime, and more.</p>
-            </div>
-            <div class="card" style="background-color: #ffc107;" onclick="showSection('leaks')">
-                <h3>Upcoming Events</h3>
-                <p>Stay updated on game events and challenges.</p>
-            </div>
-            <div class="card" style="background-color: #17a2b8;" onclick="showSection('leaderboard')">
-                <h3>Leaderboard</h3>
-                <p>See how you rank among other players.</p>
-            </div>
+    <div class="loading-container">
+        <div class="title">Game Update</div>
+        <div class="status-text" id="percentage">0%</div>
+        <div class="progress-bar">
+            <div class="progress" id="progress-bar"></div>
         </div>
+        <div class="status-text" id="download-status">0/100MB</div>
+        <div class="status-text" id="time-remaining">Time Remaining: Calculating...</div>
+        <div class="status-message" id="status-message">In Progress...</div>
+        <div class="status-text" id="completion-message" style="display: none;">Update Complete!</div>
     </div>
 
-    <div id="stats" class="content-section" style="display: none;">
-        <h2>In-Game Stats</h2>
-        <p><strong>Kills:</strong> <span id="in-game-kills"></span></p>
-        <p><strong>Playtime:</strong> <span id="playtime"></span></p>
-        <p><strong>Most Played With:</strong> <span id="achievements"></span></p>
-        <p><strong>Robux Won:</strong> <span id="matches-played"></span></p>
-    </div>
+    <script>
+        let totalSize = 3000; // in MB
+        let totalTime = 436; // total time in seconds (1 hour)
+        let updateInterval = totalTime / totalSize; // Calculate time per MB (seconds per MB)
 
-    <div id="leaks" class="content-section" style="display: none;">
-        <h2>Upcoming Events and Leaks</h2>
-        <div class="card-container">
-            <div class="card" style="background-color: #28a745;">
-                <h3>In Game Live Event</h3>
-                <p>Come Explore our IN GAME LIVE EVENT on October 26th at 9PM.</p>
-                <div id="leak-details" style="display: none;">
-                    <p>Weapon 1: Description</p>
-                    <p>Weapon 2: Description</p>
-                </div>
-            </div>
-        </div>
-    </div>
-        
+        // Retrieve stored progress from localStorage, if any
+        let currentSize = localStorage.getItem('currentSize') ? parseInt(localStorage.getItem('currentSize')) : 0;
+        let progressPercentage = (currentSize / totalSize) * 3000;
 
-    <div id="leaderboard" class="content-section" style="display: none;">
-        <h2>Leaderboard</h2>
-        <p>Top players and their rankings:</p>
-        <div class="leaderboard-list">
-            <p><strong>1. Avriv297:</strong> 2034 kills</p>
-            <p><strong>2. testinglike0:</strong> 1200 kills</p>
-            <p><strong>3. weplaysf4:</strong> 900 kills</p>
-            <p><strong>4. Yeh_23:</strong> 807 kills</p>
-            <p><strong>5. StarstuloSequoia4Bux:</strong> 756 kills</p>
-            <p><strong>6. PeaceSpooky0BonesxX:</strong> 298 kills</p>
-            <p><strong>7. TheMuscleAxiom:</strong> 280 kills</p>
-            <p><strong>8. BouncerPerson:</strong> 211 kills</p>
-            <p><strong>9. malekyoutuobe:</strong> 202 kills</p>
-            <p><strong>10. cerine5555:</strong> 190 kills</p>
-            <!-- Add more leaderboard entries here -->
-        </div>
-    </div>
+        // Initialize the page with stored progress (if any)
+        document.getElementById('progress-bar').style.width = progressPercentage + '%';
+        document.getElementById('progress-bar').textContent = progressPercentage + '%';
+        document.getElementById('percentage').textContent = progressPercentage + '%';
+        document.getElementById('download-status').textContent = currentSize + '/' + totalSize + 'MB';
 
-    <script src="index.js"></script>
+        // Status Message: In Progress or Complete
+        if (currentSize < totalSize) {
+            document.getElementById('status-message').textContent = "In Progress...";
+        } else {
+            document.getElementById('status-message').textContent = "Update Complete!";
+            document.getElementById('status-message').classList.add('status-completed');
+            document.getElementById('completion-message').style.display = "block";
+        }
+
+        // Function to calculate and display approximate time remaining
+        function updateTimeRemaining() {
+            if (currentSize < totalSize) {
+                let timeElapsed = (currentSize / totalSize) * totalTime;
+                let timeLeft = totalTime - timeElapsed;
+                let approxTimeRemaining = Math.round(timeLeft / 60); // Time in minutes
+                document.getElementById('time-remaining').textContent = 'Time Remaining: ~' + approxTimeRemaining + ' min';
+            }
+        }
+
+        // Update progress function
+        function updateProgress() {
+            if (currentSize < totalSize) {
+                currentSize += 1; // Increment by 1 MB per interval
+                let percentage = Math.round((currentSize / totalSize) * 100);
+
+                // Update the progress on the page
+                document.getElementById('progress-bar').style.width = percentage + '%';
+                document.getElementById('progress-bar').textContent = percentage + '%';
+                document.getElementById('percentage').textContent = percentage + '%';
+                document.getElementById('download-status').textContent = currentSize + '/' + totalSize + 'MB';
+
+                // Save current progress to localStorage
+                localStorage.setItem('currentSize', currentSize);
+                updateTimeRemaining(); // Update time remaining display
+            } else {
+                clearInterval(progressInterval);
+                document.getElementById('completion-message').style.display = 'block';
+                document.getElementById('status-message').textContent = 'Update Complete!';
+                document.getElementById('status-message').classList.add('status-completed');
+                localStorage.removeItem('currentSize'); // Clear stored progress after completion
+            }
+        }
+
+        let progressInterval = setInterval(updateProgress, updateInterval * 1000); // Update every interval
+    </script>
 </body>
 </html>

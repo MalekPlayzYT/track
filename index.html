@@ -109,13 +109,13 @@
     </div>
 
     <script>
-        let totalSize = 3000; // in MB
+        let totalSize = 100; // in MB
         let totalTime = 436; // total time in seconds (1 hour)
         let updateInterval = totalTime / totalSize; // Calculate time per MB (seconds per MB)
 
         // Retrieve stored progress from localStorage, if any
         let currentSize = localStorage.getItem('currentSize') ? parseInt(localStorage.getItem('currentSize')) : 0;
-        let progressPercentage = (currentSize / totalSize) * 3000;
+        let progressPercentage = (currentSize / totalSize) * 100;
 
         // Initialize the page with stored progress (if any)
         document.getElementById('progress-bar').style.width = progressPercentage + '%';

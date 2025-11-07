@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Magic Egypt | Tours & Experiences</title>
+  <meta name="description" content="Browse curated Cairo, Nile, and Red Sea tours with instant booking requests via Formspree." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bg:#0f0b07; --sand:#c7a86d; --papyrus:#f6efe3; --ink:#2a2217; --sun:#f2c14e; --accent:#b8860b; --muted:#b7a68a; }
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;color:var(--papyrus);background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial,sans-serif;line-height:1.6;overflow-x:hidden;
+      background-image:
+        radial-gradient(1200px 800px at 70% -10%, #3d2d17 0%, transparent 60%),
+        radial-gradient(900px 600px at -10% 10%, #241b10 0%, transparent 60%),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><g fill="%232a2217" fill-opacity="0.15"><path d="M0 50h60v10H0z"/><circle cx="8" cy="8" r="1"/><circle cx="22" cy="12" r="1"/><circle cx="40" cy="6" r="1"/><circle cx="54" cy="16" r="1"/></g></svg>');
+      background-size:auto, auto, 60px 60px; scroll-behavior:smooth}
+    img{max-width:100%; display:block}
+    a{color:inherit; text-decoration:none}
+
+    .container{width:min(1120px,92%); margin-inline:auto}
+    .btn{display:inline-flex; align-items:center; gap:.6rem; padding:.8rem 1.1rem; border:1px solid var(--sand); border-radius:999px; color:var(--ink); background:linear-gradient(180deg,#f7e9cd,#e7d3a0); font-weight:700; letter-spacing:.3px; box-shadow:0 2px 0 #8f6b2a inset, 0 10px 24px rgba(0,0,0,.25); transition:transform .2s ease, filter .2s ease}
+    .btn:hover{transform:translateY(-2px); filter:brightness(1.05)}
+    .btn.ghost{background:transparent; color:var(--sand); border-color:var(--sand); box-shadow:none}
+
+    /* Nav */
+    .nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(120%) blur(8px); background:linear-gradient(180deg, rgba(13,10,6,.8), rgba(13,10,6,.4)); border-bottom:1px solid rgba(199,168,109,.2); transition:background .25s ease}
+    .nav.scrolled{background:linear-gradient(180deg, rgba(13,10,6,.92), rgba(13,10,6,.62))}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:.8rem 0}
+    .brand{display:flex; align-items:center; gap:.6rem}
+    .brand-mark{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #ffe08a, #b8860b); box-shadow:0 0 0 2px #8f6b2a, 0 8px 20px rgba(0,0,0,.35); position:relative}
+    .brand-mark:after{content:""; position:absolute; inset:8px; border-radius:50%; border:2px solid rgba(0,0,0,.2)}
+    .brand-name{font-family:Cinzel,serif; font-weight:700; letter-spacing:.5px}
+    .nav-links{display:flex; align-items:center; gap:1rem}
+    .nav-links a{padding:.6rem .8rem; border-radius:10px; color:#e8dcc5}
+    .nav-links a:hover{background:rgba(255,255,255,.06)}
+    .menu-btn{display:none}
+    @media (max-width:860px){
+      .menu-btn{display:inline-flex; align-items:center; gap:.5rem; padding:.6rem .8rem; border:1px solid rgba(199,168,109,.4); border-radius:10px}
+      .nav-links{position:fixed; right:1rem; top:4.2rem; background:#15100a; border:1px solid rgba(199,168,109,.25); border-radius:14px; padding:.6rem; flex-direction:column; gap:.2rem; width:240px; display:none}
+      .nav-links.open{display:flex}
+      .nav-links a{width:100%}
+    }
+
+    header.page{padding:3rem 0 1rem}
+    .title{font-family:Cinzel,serif; font-size:clamp(1.8rem,5vw,3rem); line-height:1.1; margin:.2rem 0}
+    .kicker{color:var(--muted); text-transform:uppercase; letter-spacing:.18em; font-weight:700}
+
+    /* Sections & cards */
+    section{padding:2rem 0}
+    h2.section-title{font-family:Cinzel,serif; margin:0 0 .8rem; font-size:clamp(1.4rem,3vw,2rem)}
+    .grid{display:grid; gap:1rem}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    @media (max-width: 920px){.grid.cols-3{grid-template-columns:1fr}}
+    .card{position:relative; border-radius:18px; overflow:hidden; background:linear-gradient(180deg, rgba(246,239,227,.06), rgba(246,239,227,.02)); border:1px solid rgba(199,168,109,.25); transition:transform .2s ease}
+    .card:hover{transform:translateY(-2px)}
+    .media{height:190px; overflow:hidden; border-bottom:1px solid rgba(199,168,109,.2)}
+    .media img{width:100%; height:100%; object-fit:cover; transform:scale(1.04); transition:transform .8s ease}
+    .card:hover .media img{transform:scale(1)}
+    .body{padding:1rem}
+    .meta{display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin:.4rem 0 0}
+    .price{font-weight:800; color:#f3dfb3}
+
+    /* Detail view */
+    .detail{position:fixed; inset:0; z-index:70; background:rgba(10,7,4,.6); display:none}
+    .detail.open{display:block}
+    .detail-sheet{position:absolute; inset:4% 4% 4% 4%; background:#120d08; border:1px solid rgba(199,168,109,.25); border-radius:20px; overflow:auto; box-shadow:0 30px 120px rgba(0,0,0,.6)}
+    .detail-head{position:sticky; top:0; background:linear-gradient(180deg, rgba(18,13,8,.96), rgba(18,13,8,.8)); border-bottom:1px solid rgba(199,168,109,.25); padding:.8rem 1rem; display:flex; align-items:center; gap:.6rem; z-index:1}
+    .detail-body{padding:1rem}
+    .detail-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:1rem}
+    @media (max-width:920px){.detail-grid{grid-template-columns:1fr}}
+    .crumb{color:#d9caa9}
+    .hero-media{border-radius:14px; overflow:hidden; border:1px solid rgba(199,168,109,.25)}
+    .hero-media img{width:100%; height:100%; object-fit:cover}
+    .mini{display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; margin-top:.5rem}
+    .mini img{height:80px; object-fit:cover; border-radius:10px; border:1px solid rgba(199,168,109,.25)}
+    .bullets{display:grid; gap:.4rem; padding-left:1rem}
+
+    /* Booking Modal */
+    .modal{position:fixed; inset:0; z-index:80; display:none; align-items:center; justify-content:center; background:rgba(10,7,4,.64); backdrop-filter:blur(4px)}
+    .modal.open{display:flex}
+    .modal-card{width:min(760px, 96%); max-height:90dvh; overflow:auto; border-radius:20px; border:1px solid rgba(199,168,109,.25); background:#120d08; box-shadow:0 40px 140px rgba(0,0,0,.6)}
+    .modal-head{position:sticky; top:0; display:flex; align-items:center; gap:.8rem; justify-content:space-between; padding:1rem; border-bottom:1px solid rgba(199,168,109,.25); background:linear-gradient(180deg, rgba(18,13,8,.96), rgba(18,13,8,.8))}
+    .modal-title{display:flex; flex-direction:column}
+    .modal-body{padding:1rem}
+    .field{display:flex; flex-direction:column; gap:.35rem; margin-bottom:.8rem}
+    .field input,.field select,.field textarea{background:#0f0a06; color:#f0e6cf; border:1px solid rgba(199,168,109,.35); border-radius:12px; padding:.8rem}
+    .field textarea{min-height:120px; resize:vertical}
+    .two{display:grid; gap:.8rem; grid-template-columns:1fr 1fr}
+    .three{display:grid; gap:.8rem; grid-template-columns:1fr 1fr 1fr}
+    @media (max-width:640px){.two,.three{grid-template-columns:1fr}}
+    .help{color:var(--muted); font-size:.9rem}
+    .review{border:1px dashed rgba(199,168,109,.35); border-radius:12px; padding:.8rem; background:rgba(20,15,10,.35); display:grid; gap:.25rem}
+
+    /* Travellers */
+    .traveller{border:1px solid rgba(199,168,109,.35); border-radius:14px; padding:1rem; background:rgba(20,15,10,.35); margin-bottom:.8rem}
+    .traveller h4{margin:.2rem 0 .6rem; font-family:Cinzel,serif}
+    .files{display:grid; grid-template-columns:1fr 1fr; gap:.8rem}
+    @media (max-width:640px){.files{grid-template-columns:1fr}}
+    .thumb{width:100%; height:140px; border:1px dashed rgba(199,168,109,.35); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:.9rem; color:var(--muted); overflow:hidden}
+    .thumb img{width:100%; height:100%; object-fit:cover}
+
+    /* Reveal */
+    [data-reveal]{opacity:0; transform:translateY(12px); transition:opacity .6s ease, transform .6s ease}
+    [data-reveal].visible{opacity:1; transform:none}
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <header class="nav" id="siteNav">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html" aria-label="Magic Egypt Home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name">Magic Egypt</span>
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="#e8dcc5" stroke-width="2" stroke-linecap="round"/></svg>
+        Menu
+      </button>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="tours.html" aria-current="page">Tours</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- PAGE HEADER -->
+  <header class="page container">
+    <span class="kicker" data-reveal>Curated Experiences</span>
+    <h1 class="title" data-reveal style="transition-delay:.06s">Our Signature Tours</h1>
+    <p style="max-width:60ch;color:#e7dbc4" data-reveal style="transition-delay:.12s">Browse by region. Click <em>Details</em> for a full overview page. Click <em>Book</em> to send a request. All content is editable in one data object.</p>
+  </header>
+
+  <!-- DYNAMIC TOURS RENDER TARGETS -->
+  <main id="content" class="container" style="padding-bottom:6rem"></main>
+
+  <!-- DETAILS VIEW (client-side page) -->
+  <section id="detail" class="detail" aria-hidden="true">
+    <div class="detail-sheet">
+      <div class="detail-head">
+        <button id="detailBack" class="btn ghost" style="padding:.45rem .8rem">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#c7a86d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+        <span class="crumb" id="detailCrumb"></span>
+        <span style="margin-left:auto"></span>
+        <button id="detailBook" class="btn">Book this tour</button>
+      </div>
+      <div class="detail-body container" id="detailBody"></div>
+    </div>
+  </section>
+
+  <!-- BOOKING MODAL (Formspree) -->
+  <div class="modal" id="bookingModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card" role="document">
+      <div class="modal-head">
+        <div class="modal-title">
+          <strong style="font-family:Cinzel,serif" id="modalTitle">Booking Request</strong>
+          <small id="modalSub" style="color:#d9caa9"></small>
+        </div>
+        <button id="closeModal" class="btn ghost" style="padding:.5rem .8rem">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="review" style="margin-bottom:1rem">
+          <div><strong>Selected Tour:</strong> <span id="reviewTour">—</span></div>
+          <div><strong>Quoted Price:</strong> <span id="reviewPrice">—</span></div>
+        </div>
+        <form id="bookingForm" action="https://formspree.io/f/mgvewrdq" method="POST" enctype="multipart/form-data">
+          <!-- Hidden fields passed to Formspree -->
+          <input type="hidden" name="tour" id="tourHidden">
+          <input type="hidden" name="price" id="priceHidden">
+          <input type="hidden" name="_subject" value="Magic Egypt — New Booking Request">
+          <input type="text" name="_gotcha" style="display:none">
+
+          <!-- Lead contact -->
+          <div class="two">
+            <div class="field">
+              <label for="name">Lead Traveler</label>
+              <input id="name" name="name" placeholder="Full name" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" required>
+            </div>
+          </div>
+
+          <!-- Party breakdown -->
+          <div class="three">
+            <div class="field">
+              <label for="adults">Adults (18+)</label>
+              <input id="adults" name="adults" type="number" min="1" value="2">
+            </div>
+            <div class="field">
+              <label for="teens">Teens (12–17)</label>
+              <input id="teens" name="teens" type="number" min="0" value="0">
+            </div>
+            <div class="field">
+              <label for="children">Children (0–11)</label>
+              <input id="children" name="children" type="number" min="0" value="0">
+            </div>
+          </div>
+
+          <!-- Children ages dynamic -->
+          <div id="childrenAgesWrap" class="field" style="display:none">
+            <label>Children Ages</label>
+            <div id="childrenAges" class="three"></div>
+            <p class="help">Enter ages at time of travel (needed for tickets and rooming).</p>
+          </div>
+
+          <!-- Dates (calendar) -->
+          <div class="two">
+            <div class="field">
+              <label for="start">Start Date</label>
+              <input id="start" name="start_date" type="date" required>
+            </div>
+            <div class="field">
+              <label for="end">End Date</label>
+              <input id="end" name="end_date" type="date" required>
+            </div>
+          </div>
+
+          <!-- Phone & notes -->
+          <div class="two">
+            <div class="field">
+              <label for="phone">Phone / WhatsApp</label>
+              <input id="phone" name="phone" placeholder="+20 1X XXX XXXX">
+            </div>
+            <div class="field">
+              <label for="hotel">Hotel Preference (optional)</label>
+              <input id="hotel" name="hotel_preference" placeholder="e.g., St. Regis Cairo, 5★ or 4★ boutique">
+            </div>
+          </div>
+
+          <!-- Travellers repeater -->
+          <div class="traveller" id="travellersWrap">
+            <h4>Traveler(s)</h4>
+            <div id="travellers"></div>
+            <div style="display:flex; gap:.6rem; justify-content:flex-end">
+              <button class="btn ghost" type="button" id="addTraveller">+ Add Traveler</button>
+            </div>
+            <p class="help">Add each traveler with full name, date of birth, then upload passport image(s).</p>
+          </div>
+
+          <div class="field" style="margin-top:.4rem">
+            <label><input type="checkbox" id="consent" required> I confirm the details above are correct to the best of my knowledge.</label>
+          </div>
+
+          <div style="display:flex; gap:.6rem; align-items:center; justify-content:flex-end; margin-top:.6rem">
+            <button class="btn ghost" type="button" id="cancelBtn">Cancel</button>
+            <button class="btn" type="submit" id="submitBtn">Send Booking Request</button>
+          </div>
+          <p class="help">We’ll reply within one business day with confirmation and next steps.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer style="border-top:1px solid rgba(199,168,109,.25); margin-top:2rem">
+    <div class="container" style="display:flex; align-items:center; gap:.7rem; padding:1.2rem 0 2.4rem">
+      <span class="brand-mark" aria-hidden="true" style="width:28px; height:28px"></span>
+      <strong>Magic Egypt</strong>
+      <span style="color:var(--muted)">•</span>
+      <span style="color:var(--muted)">Cairo • Luxor • Aswan • Red Sea</span>
+      <span style="margin-left:auto"><a class="btn ghost" href="index.html">Back to Home</a></span>
+    </div>
+  </footer>
+
+  <script>
+    // ================== EASY CUSTOMIZATION ==================
+    const toursData = [
+      {
+        section: 'Cairo', id: 'cairo', items: [
+          {
+            id: 'pyramid', name: 'Pyramid Tour', price: 500, duration: 'Full day',
+            image: 'https://media.istockphoto.com/id/1174818077/photo/mosque-and-pyramids.jpg?s=612x612&w=0&k=20&c=kewLXiirLBe_QOeAQ2MPNFk8S4oxcTFt0AMPQ4mAXKY=',
+            images: [
+              'https://media.istockphoto.com/id/1174818077/photo/mosque-and-pyramids.jpg?s=612x612&w=0&k=20&c=kewLXiirLBe_QOeAQ2MPNFk8S4oxcTFt0AMPQ4mAXKY=',
+              'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1578923303800-8549e4a8d1a2?q=80&w=1600&auto=format&fit=crop'
+            ],
+            description: 'Giza Plateau with private Egyptologist, Sphinx, and panoramic viewpoints. Optional camel photo stop.',
+            longDescription: 'Spend a full day exploring the Great Pyramid of Khufu, Khafre and Menkaure, marvel at the Sphinx, and enjoy curated photo stops away from the crowds. Upgrade options include inside-the-pyramid tickets and a sunset felucca in Cairo.',
+            highlights: [
+              'VIP meet & assist at hotel pick-up',
+              'Private A/C vehicle and licensed Egyptologist',
+              'Panorama point + Sphinx enclosure',
+              'Optional camel photo stop'
+            ],
+            includes: [ 'Private transport', 'Guide fees', 'Bottled water', 'All taxes & service' ],
+            excludes: [ 'Lunch', 'Pyramid interior tickets', 'Tips' ]
+          }
+        ]
+      },
+      {
+        section: 'Nile', id: 'nile', items: [
+          {
+            id: 'nile-classic', name: 'Nile Tour', price: 1000, duration: '2 days',
+            image: 'https://images.unsplash.com/photo-1542639124-8b5f54bfa9b5?q=80&w=1600&auto=format&fit=crop',
+            images: [
+              'https://images.unsplash.com/photo-1542639124-8b5f54bfa9b5?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1563911302283-d2bc129e7570?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1519885275243-8f7f0e6f4a6f?q=80&w=1600&auto=format&fit=crop'
+            ],
+            description: 'Luxor & Aswan highlights with a sunset felucca. Flexible pacing for families and photographers.',
+            longDescription: 'Cover key temples and tombs across Luxor and Aswan with a balanced pace. Ideal for first-time visitors who want depth without rush. Add-on: hot-air balloon in Luxor (weather permitting).',
+            highlights: [
+              'Karnak & Luxor temples', 'Valley of the Kings (3 tombs)', 'Philae Temple by boat', 'Sunset felucca'
+            ],
+            includes: [ 'Private transport', 'Egyptologist guide', 'Selected entry tickets' ],
+            excludes: [ 'Domestic flights', 'Balloon ride', 'Meals', 'Tips' ]
+          }
+        ]
+      },
+      {
+        section: 'Hurgadah', id: 'hurgadah', items: [
+          {
+            id: 'red-sea', name: 'Red Sea Tour', price: 1100, duration: 'Full day',
+            image: 'https://images.unsplash.com/photo-1544551763-7ef420be2c9b?q=80&w=1600&auto=format&fit=crop',
+            images: [
+              'https://images.unsplash.com/photo-1544551763-7ef420be2c9b?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1578926375605-eaf7559b145d?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1600&auto=format&fit=crop'
+            ],
+            description: 'Speedboat to coral gardens with snorkel gear, reef-friendly sunscreen, and beach club access.',
+            longDescription: 'A relaxed Red Sea day focused on snorkeling vibrant reefs and lounging at a quality beach club. Suitable for beginners; all snorkel gear provided.',
+            highlights: [ 'Private speedboat', 'Snorkel gear', 'Beach club access' ],
+            includes: [ 'Boat & crew', 'Mask, fins & snorkel', 'Soft drinks' ],
+            excludes: [ 'Lunch', 'National park fees', 'Tips' ]
+          }
+        ]
+      }
+    ];
+
+    // ================== RENDERER ==================
+    const content = document.getElementById('content');
+    function money(n){ return `$${Number(n).toLocaleString(undefined,{maximumFractionDigits:0})}`; }
+
+    function render(){
+      content.innerHTML = '';
+      toursData.forEach(sec=>{
+        const section = document.createElement('section');
+        section.id = sec.id;
+        section.innerHTML = `
+          <h2 class="section-title" data-reveal>${sec.section}</h2>
+          <div class="grid cols-3" data-reveal style="transition-delay:.06s"></div>
+        `;
+        const grid = section.querySelector('.grid');
+        sec.items.forEach(item=>{
+          const card = document.createElement('article');
+          card.className = 'card';
+          card.innerHTML = `
+            <div class="media"><img src="${item.image}" alt="${item.name}"></div>
+            <div class="body">
+              <h3 style="margin:.2rem 0 .4rem; font-family:Cinzel,serif">${item.name}</h3>
+              <p style="color:#e7dbc4; margin:0">${item.description}</p>
+              <div class="meta">
+                <span class="price">${money(item.price)}</span>
+                <div style="display:flex; gap:.4rem">
+                  <button class="btn ghost" data-view="${item.id}">Details</button>
+                  <button class="btn" data-book="${item.id}">Book</button>
+                </div>
+              </div>
+              <p class="help" style="margin:.5rem 0 0">Duration: ${item.duration}</p>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        content.appendChild(section);
+      });
+      attachReveals();
+      hydrateBookingButtons();
+      hydrateDetails();
+    }
+
+    // ================== REVEAL ==================
+    function attachReveals(){
+      const els = document.querySelectorAll('[data-reveal]');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target);} });
+      },{threshold:0.12});
+      els.forEach(el=>io.observe(el));
+    }
+
+    // ================== BOOKING MODAL ==================
+    const modal = document.getElementById('bookingModal');
+    const closeModal = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalSub = document.getElementById('modalSub');
+    const reviewTour = document.getElementById('reviewTour');
+    const reviewPrice = document.getElementById('reviewPrice');
+    const tourHidden = document.getElementById('tourHidden');
+    const priceHidden = document.getElementById('priceHidden');
+    const bookingForm = document.getElementById('bookingForm');
+
+    function openModalWithTour(t){
+      modalTitle.textContent = `Booking Request — ${t.name}`;
+      modalSub.textContent = `${t.section} • ${t.duration}`;
+      reviewTour.textContent = `${t.name} — ${t.section}`;
+      reviewPrice.textContent = money(t.price);
+      tourHidden.value = `${t.name} — ${t.section}`;
+      priceHidden.value = t.price;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+      document.getElementById('name').focus();
+    }
+    function closeBookingModal(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+    }
+    closeModal.addEventListener('click', closeBookingModal);
+    cancelBtn.addEventListener('click', closeBookingModal);
+    modal.addEventListener('click', (e)=>{ if(e.target === modal) closeBookingModal(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && modal.classList.contains('open')) closeBookingModal(); });
+
+    function hydrateBookingButtons(){
+      document.querySelectorAll('[data-book]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const id = btn.getAttribute('data-book');
+          const found = getTourById(id);
+          openModalWithTour(found);
+        });
+      });
+    }
+
+    // Dynamic children ages
+    const childrenInput = document.getElementById('children');
+    const agesWrap = document.getElementById('childrenAgesWrap');
+    const agesBox = document.getElementById('childrenAges');
+    function renderAges(){
+      const n = Math.max(0, parseInt(childrenInput.value || '0', 10));
+      agesBox.innerHTML = '';
+      if(n > 0){
+        agesWrap.style.display = '';
+        for(let i=1;i<=n;i++){
+          const f = document.createElement('div');
+          f.className = 'field';
+          f.innerHTML = `<input name="child_age_${i}" placeholder="Age of child ${i}" type="number" min="0" max="17" required>`;
+          agesBox.appendChild(f);
+        }
+      } else { agesWrap.style.display = 'none'; }
+    }
+    childrenInput.addEventListener('input', renderAges);
+
+    // Date min constraints (today and end >= start)
+    const startEl = document.getElementById('start');
+    const endEl = document.getElementById('end');
+    const today = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    startEl.min = iso(today);
+    endEl.min = iso(today);
+    startEl.addEventListener('change', ()=>{ if(endEl.value < startEl.value){ endEl.value = startEl.value; } endEl.min = startEl.value; });
+
+    // Submit via fetch to keep user in page (Formspree compatible)
+    bookingForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      // Basic validation: at least one traveler with required fields
+      const tBlocks = document.querySelectorAll('.traveller-item');
+      if(tBlocks.length === 0){ alert('Please add at least one traveler.'); return; }
+      for(const b of tBlocks){
+        const name = b.querySelector('input[name$="[full_name]"]');
+        const dob = b.querySelector('input[name$="[dob]"]');
+        const pass = b.querySelector('input[name$="[passport_front]"]');
+        if(!name.value.trim() || !dob.value){ alert('Each traveler must have full name and date of birth.'); return; }
+        if(!pass.files || pass.files.length===0){ alert('Please upload the main passport photo page for each traveler.'); return; }
+      }
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true; btn.textContent = 'Sending...';
+      try{
+        const data = new FormData(bookingForm);
+        const res = await fetch(bookingForm.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+        if(res.ok){
+          btn.textContent = 'Request Sent ✅';
+          setTimeout(()=>{ btn.disabled = false; btn.textContent = 'Send Booking Request'; bookingForm.reset(); renderAges(); closeBookingModal(); }, 1200);
+        } else {
+          btn.textContent = 'Try Again'; btn.disabled = false; alert('There was an issue sending your request. Please check your info and try again.');
+        }
+      } catch(err){
+        btn.textContent = 'Try Again'; btn.disabled = false; alert('Network error. Please try again.');
+      }
+    });
+
+    // ===== Travelers repeater =====
+    const travellersBox = document.getElementById('travellers');
+    const addTravellerBtn = document.getElementById('addTraveller');
+    let travellerIndex = 0;
+
+    function filePreview(input, previewEl){
+      input.addEventListener('change', ()=>{
+        const f = input.files && input.files[0];
+        if(!f){ previewEl.innerHTML = 'No file'; return; }
+        if(!f.type.startsWith('image/')){ previewEl.textContent = 'Image only (JPG/PNG).'; input.value=''; return; }
+        const url = URL.createObjectURL(f);
+        previewEl.innerHTML = `<img alt="preview" src="${url}">`;
+      });
+    }
+
+    function makeTraveller(){
+      const i = travellerIndex++;
+      const wrap = document.createElement('div');
+      wrap.className = 'traveller-item';
+      wrap.innerHTML = `
+        <div class="two">
+          <div class="field">
+            <label>Full Name</label>
+            <input name="travellers[${i}][full_name]" placeholder="As shown on passport" required>
+          </div>
+          <div class="field">
+            <label>Date of Birth</label>
+            <input name="travellers[${i}][dob]" type="date" required>
+          </div>
+        </div>
+        <div class="files">
+          <div class="field">
+            <label>Passport — photo page (required)</label>
+            <input name="travellers[${i}][passport_front]" type="file" accept="image/*" required>
+            <div class="thumb" id="pf_${i}">Preview</div>
+          </div>
+          <div class="field">
+            <label>Passport — additional page (optional)</label>
+            <input name="travellers[${i}][passport_back]" type="file" accept="image/*">
+            <div class="thumb" id="pb_${i}">Preview</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; margin-top:.4rem">
+          <button type="button" class="btn ghost" data-remove>Remove</button>
+        </div>
+      `;
+      // Enforce sequence: name -> dob -> files (disable files until name & dob present)
+      const nameEl = wrap.querySelector(`input[name="travellers[${i}][full_name]"]`);
+      const dobEl = wrap.querySelector(`input[name="travellers[${i}][dob]"]`);
+      const fileEls = wrap.querySelectorAll('input[type="file"]');
+      function syncFileEnable(){
+        const ok = nameEl.value.trim().length>0 && !!dobEl.value;
+        fileEls.forEach(el=>{ el.disabled = !ok; });
+      }
+      nameEl.addEventListener('input', syncFileEnable);
+      dobEl.addEventListener('change', syncFileEnable);
+      syncFileEnable();
+
+      // Previews
+      filePreview(wrap.querySelector(`input[name="travellers[${i}][passport_front]"]`), wrap.querySelector(`#pf_${i}`));
+      filePreview(wrap.querySelector(`input[name="travellers[${i}][passport_back]"]`), wrap.querySelector(`#pb_${i}`));
+
+      // Remove
+      wrap.querySelector('[data-remove]').addEventListener('click', ()=>{ travellersBox.removeChild(wrap); });
+      return wrap;
+    }
+
+    addTravellerBtn.addEventListener('click', ()=>{ travellersBox.appendChild(makeTraveller()); });
+    // Add one traveller by default
+    travellersBox.appendChild(makeTraveller());
+
+    // ================== DETAILS (client-side page) ==================
+    const detail = document.getElementById('detail');
+    const detailBody = document.getElementById('detailBody');
+    const detailBack = document.getElementById('detailBack');
+    const detailBook = document.getElementById('detailBook');
+    const detailCrumb = document.getElementById('detailCrumb');
+
+    function getTourById(id){
+      return toursData.flatMap(s=>s.items.map(i=>({...i, section:s.section}))).find(i=>i.id===id);
+    }
+
+    function openDetailById(id){
+      const t = getTourById(id);
+      if(!t) return;
+      detailCrumb.textContent = `${t.section} / ${t.name}`;
+      document.title = `Magic Egypt | ${t.name}`;
+      detailBody.innerHTML = `
+        <div class="detail-grid">
+          <div>
+            <div class="hero-media"><img src="${t.images?.[0] || t.image}" alt="${t.name}"></div>
+            ${t.images && t.images.length>1 ? `<div class=\"mini\">${t.images.slice(1,4).map(src=>`<img src=\"${src}\" alt=\"${t.name} image\">`).join('')}</div>` : ''}
+          </div>
+          <div>
+            <h2 style="font-family:Cinzel,serif; margin:.2rem 0">${t.name}</h2>
+            <p style="color:#e7dbc4; margin:.2rem 0 1rem">${t.longDescription || t.description}</p>
+            <div style="display:flex; gap:.6rem; align-items:center; margin:.3rem 0 1rem">
+              <span class="price" style="font-size:1.2rem">${money(t.price)}</span>
+              <span class="help">Duration: ${t.duration}</span>
+            </div>
+            ${t.highlights?`<h3 style=\"font-family:Cinzel,serif; margin:.4rem 0 .2rem\">Highlights</h3><ul class=\"bullets\">${t.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>`:''}
+            ${t.includes?`<h3 style=\"font-family:Cinzel,serif; margin:.8rem 0 .2rem\">Includes</h3><ul class=\"bullets\">${t.includes.map(h=>`<li>${h}</li>`).join('')}</ul>`:''}
+            ${t.excludes?`<h3 style=\"font-family:Cinzel,serif; margin:.8rem 0 .2rem\">Excludes</h3><ul class=\"bullets\">${t.excludes.map(h=>`<li>${h}</li>`).join('')}</ul>`:''}
+            <div style="margin-top:1rem; display:flex; gap:.6rem">
+              <button class="btn" data-book-detail="${t.id}">Book this tour</button>
+            </div>
+          </div>
+        </div>
+      `;
+      detail.classList.add('open');
+      detail.setAttribute('aria-hidden','false');
+      // Bind detail book
+      detailBody.querySelector('[data-book-detail]')?.addEventListener('click', ()=>{
+        openModalWithTour(t);
+      });
+    }
+
+    function closeDetail(){
+      detail.classList.remove('open');
+      detail.setAttribute('aria-hidden','true');
+      document.title = 'Magic Egypt | Tours & Experiences';
+    }
+
+    function hydrateDetails(){
+      document.querySelectorAll('[data-view]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const id = btn.getAttribute('data-view');
+          history.pushState({tour:id}, '', `#tour/${id}`);
+          openDetailById(id);
+        });
+      });
+    }
+
+    // Back button & hash routing
+    detailBack.addEventListener('click', ()=>{ history.back(); });
+    window.addEventListener('popstate', ()=>{
+      if(location.hash.startsWith('#tour/')){
+        const id = location.hash.split('/')[1];
+        openDetailById(id);
+      } else { closeDetail(); }
+    });
+    if(location.hash.startsWith('#tour/')){ openDetailById(location.hash.split('/')[1]); }
+
+    // Mobile nav
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+    menuBtn?.addEventListener('click',()=>{
+      const open = navLinks.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', String(open));
+    });
+
+    // Sticky nav fade
+    const siteNav = document.getElementById('siteNav');
+    window.addEventListener('scroll', ()=>{
+      siteNav.classList.toggle('scrolled', (window.scrollY||document.documentElement.scrollTop)>10);
+    });
+
+    // Render on load
+    render();
+    renderAges();
+  </script>
+</body>
+</html>

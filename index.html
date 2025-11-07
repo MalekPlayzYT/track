@@ -1,172 +1,350 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Update Loading Screen</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Magic Egypt | Timeless Journeys • Modern Comfort</title>
+  <meta name="description" content="Magic Egypt — curated Egypt tours with an ancient aesthetic and modern comfort. Explore Cairo, Luxor, Aswan, Sahara, and the Red Sea with seamless booking." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f0b07;           /* night desert */
+      --sand:#c7a86d;         /* sand gold */
+      --papyrus:#f6efe3;      /* papyrus */
+      --ink:#2a2217;          /* ink brown */
+      --sun:#f2c14e;          /* sun */
+      --accent:#b8860b;       /* deep gold */
+      --muted:#b7a68a;        /* muted text */
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e2a47, #233d63);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            color: white;
-        }
+    /* -------- Reset & base -------- */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--papyrus); background:var(--bg);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial,sans-serif;
+      line-height:1.6; overflow-x:hidden;
+      background-image:
+        radial-gradient(1200px 800px at 70% -10%, #3d2d17 0%, transparent 60%),
+        radial-gradient(900px 600px at -10% 10%, #241b10 0%, transparent 60%),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><g fill="%232a2217" fill-opacity="0.15"><path d="M0 50h60v10H0z"/><circle cx="8" cy="8" r="1"/><circle cx="22" cy="12" r="1"/><circle cx="40" cy="6" r="1"/><circle cx="54" cy="16" r="1"/></g></svg>');
+      background-size:auto, auto, 60px 60px;
+    }
+    img{max-width:100%; height:auto; display:block}
+    a{color:inherit; text-decoration:none}
 
-        .loading-container {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 40px 50px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            width: 80%;
-            max-width: 600px;
-        }
+    /* -------- Utility -------- */
+    .container{width:min(1120px, 92%); margin-inline:auto}
+    .btn{display:inline-flex; align-items:center; gap:.6rem; padding:.9rem 1.2rem; border:1px solid var(--sand); border-radius:999px; color:var(--ink); background:linear-gradient(180deg, #f7e9cd, #e7d3a0); font-weight:700; letter-spacing:.3px; box-shadow:0 2px 0 #8f6b2a inset, 0 10px 24px rgba(0,0,0,.25); transition:transform .2s ease, filter .2s ease}
+    .btn:hover{transform:translateY(-2px); filter:brightness(1.05)}
+    .btn.ghost{background:transparent; color:var(--sand); border-color:var(--sand); box-shadow:none}
+    .chip{display:inline-block; padding:.35rem .7rem; border:1px solid #6b5a3e66; border-radius:999px; font-size:.85rem; color:var(--muted)}
 
-        .title {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+    /* -------- Top Nav -------- */
+    .nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(120%) blur(8px); background:linear-gradient(180deg, rgba(13,10,6,.8), rgba(13,10,6,.4)); border-bottom:1px solid rgba(199,168,109,.2)}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:.8rem 0}
+    .brand{display:flex; align-items:center; gap:.6rem}
+    .brand-mark{width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #ffe08a, #b8860b); box-shadow:0 0 0 2px #8f6b2a, 0 8px 20px rgba(0,0,0,.35); position:relative}
+    .brand-mark:after{content:""; position:absolute; inset:8px; border-radius:50%; border:2px solid rgba(0,0,0,.2)}
+    .brand-name{font-family:Cinzel,serif; font-weight:700; letter-spacing:.5px}
+    .nav-links{display:flex; align-items:center; gap:1rem}
+    .nav-links a{padding:.6rem .8rem; border-radius:10px; color:#e8dcc5}
+    .nav-links a:hover{background:rgba(255,255,255,.06)}
+    .menu-btn{display:none}
 
-        .progress-bar {
-            background-color: #4f5b66;
-            width: 100%;
-            height: 12px;
-            border-radius: 50px;
-            margin-bottom: 30px;
-            position: relative;
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
-        }
+    @media (max-width: 860px){
+      .menu-btn{display:inline-flex; align-items:center; gap:.5rem; padding:.6rem .8rem; border:1px solid rgba(199,168,109,.4); border-radius:10px}
+      .nav-links{position:fixed; right:1rem; top:4.2rem; background:#15100a; border:1px solid rgba(199,168,109,.25); border-radius:14px; padding:.6rem; flex-direction:column; gap:.2rem; width:240px; display:none}
+      .nav-links.open{display:flex}
+      .nav-links a{width:100%}
+    }
 
-        .progress {
-            background-color: #00b894;
-            height: 100%;
-            width: 0%;
-            border-radius: 50px;
-            transition: width 1s ease;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
-        }
+    /* -------- Hero -------- */
+    .hero{position:relative; padding:clamp(3rem, 7vw, 6rem) 0 4rem}
+    .hero-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:3rem; align-items:center}
+    @media (max-width: 920px){.hero-grid{grid-template-columns:1fr;}}
+    .overline{letter-spacing:.24em; text-transform:uppercase; color:var(--muted); font-weight:700}
+    h1.title{font-family:Cinzel,serif; font-size:clamp(2.1rem, 5.5vw, 3.6rem); line-height:1.1; margin:.6rem 0 1rem}
+    .lead{font-size:1.1rem; color:#e7dbc4}
+    .cta-row{display:flex; gap:.8rem; flex-wrap:wrap; margin-top:1.2rem}
 
-        .status-text {
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-        }
+    /* Hero art */
+    .scene{position:relative; aspect-ratio:1.05/1; border-radius:24px; background:linear-gradient(180deg, #1a140d, #0f0b07 55%); border:1px solid rgba(199,168,109,.25); overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.45)}
+    .sun{position:absolute; width:180px; aspect-ratio:1; background:radial-gradient(circle at 30% 30%, #fff2b9, var(--sun) 65%, #b8860b); border-radius:50%; top:6%; left:10%; filter:blur(.4px); box-shadow:0 0 80px 20px rgba(242,193,78,.35)}
+    .sand{position:absolute; inset:auto 0 0 0; height:48%; background:linear-gradient(180deg, transparent, rgba(199,168,109,.06) 10%, rgba(199,168,109,.2) 100%)}
+    .pyramids{position:absolute; bottom:16%; left:8%; width:84%}
+    .pyramids svg{width:100%; height:auto}
+    .stars{position:absolute; inset:0; background-image:radial-gradient(#fff8, #fff0 40%); background-size:2px 2px; opacity:.3; animation:twinkle 6s linear infinite}
+    @keyframes twinkle{to{background-position:1000px 0}}
+    .float{animation:float 6s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
-        .status-message {
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-top: 20px;
-            color: orange;
-        }
 
-        .status-completed {
-            color: #27ae60;
-        }
 
-        .action-button {
-            background-color: #00b894;
-            color: white;
-            padding: 12px 25px;
-            font-size: 18px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    /* Gallery */
+    .gallery-grid{display:grid; gap:1rem; grid-template-columns:2fr 1fr 1fr;}
+    .gallery-grid .tall{grid-row:span 2}
+    .gallery-grid .wide{grid-column:span 2}
+    @media (max-width:920px){.gallery-grid{grid-template-columns:1fr}}
+    .gallery-item{position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(199,168,109,.25);}
+    .gallery-item img{width:100%; height:100%; object-fit:cover; transform:scale(1.04); transition:transform .8s ease}
+    .gallery-item:hover img{transform:scale(1)}
+    .badge{position:absolute; left:.8rem; bottom:.8rem; background:rgba(20,15,10,.65); border:1px solid rgba(199,168,109,.35); color:#f3e7cf; padding:.25rem .5rem; border-radius:10px; font-size:.85rem}
 
-        .action-button:hover {
-            background-color: #019c79;
-        }
+    /* Contact */
+    .contact{border:1px solid rgba(199,168,109,.25); border-radius:18px; padding:1.4rem; background:linear-gradient(180deg, rgba(246,239,227,.05), rgba(246,239,227,.02))}
+    .contact-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:1.2rem}
+    @media (max-width:920px){.contact-grid{grid-template-columns:1fr}}
+    .contact h3{margin-top:0}
+    .field{display:flex; flex-direction:column; gap:.35rem}
+    .field input,.field textarea{background:#120d08; color:#f0e6cf; border:1px solid rgba(199,168,109,.35); border-radius:12px; padding:.8rem}
+    .field input::placeholder,.field textarea::placeholder{color:#b7a68a}
+    .field textarea{min-height:120px; resize:vertical}
+    .contact .btn{align-self:flex-start}
+    .contact-card{border:1px dashed rgba(199,168,109,.35); border-radius:14px; padding:1rem; background:rgba(20,15,10,.35)}
 
-    </style>
+    /* Feature cards */
+    .grid{display:grid; gap:1.2rem}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+    @media (max-width: 920px){.grid.cols-3,.grid.cols-2{grid-template-columns:1fr}}
+
+    .card{position:relative; padding:1.2rem; border-radius:18px; background:linear-gradient(180deg, rgba(246,239,227,.06), rgba(246,239,227,.02)); border:1px solid rgba(199,168,109,.25); overflow:hidden}
+    .card:before{content:""; position:absolute; inset:0; background:radial-gradient(600px 220px at top right, rgba(255,225,150,.12), transparent 60%)}
+    .card h3{margin:.2rem 0 .4rem; font-family:Cinzel,serif}
+    .card p{color:#e7dbc4}
+    .icon{width:44px; height:44px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(180deg, #f2d58c, #d8b162); color:#351e02; box-shadow:0 0 0 1px #8f6b2a inset}
+
+    /* Tours preview (link to tours.html) */
+    .tour-preview{display:grid; grid-template-columns:1.2fr .8fr; gap:1.2rem; align-items:stretch}
+    @media (max-width: 920px){.tour-preview{grid-template-columns:1fr}}
+    .preview-media{position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(199,168,109,.25)}
+    .preview-media img{width:100%; height:100%; object-fit:cover; transform:scale(1.03); transition:transform .8s ease}
+    .preview-media:hover img{transform:scale(1)}
+    .papyrus{background:repeating-linear-gradient(0deg, rgba(246,239,227,.8), rgba(246,239,227,.8) 6px, rgba(232,214,187,.8) 7px, rgba(232,214,187,.8) 9px); color:var(--ink); border:1px solid #c6a775; border-radius:18px; padding:1.2rem; box-shadow:0 2px 0 #b1883b inset}
+    .papyrus h3{font-family:Cinzel,serif; margin:.3rem 0}
+    .papyrus p{color:#3a2e1b}
+    .list{display:grid; gap:.4rem; margin:.8rem 0 0; padding:0; list-style:none}
+    .list li{display:flex; align-items:flex-start; gap:.6rem}
+    .list svg{flex:0 0 18px; margin-top:2px}
+
+    /* Testimonials */
+    .quote{position:relative; padding:1.2rem 1.2rem 1.2rem 3.2rem; border-left:3px solid var(--sand); color:#e9dec7}
+    .quote:before{content:"\201C"; position:absolute; left:.6rem; top:-.2rem; font-size:4rem; color:rgba(199,168,109,.35); font-family:Cinzel,serif}
+
+    /* CTA strip */
+    .cta-strip{position:relative; border:1px solid rgba(199,168,109,.25); border-radius:18px; padding:1.4rem; background:linear-gradient(90deg, rgba(247,227,176,.06), rgba(247,227,176,0) 70%)}
+
+    /* Footer */
+    footer{margin-top:3rem; border-top:1px solid rgba(199,168,109,.25); padding:1.6rem 0 3.4rem; color:#e8dcc5}
+    .foot-grid{display:grid; grid-template-columns:1fr auto; gap:1rem; align-items:center}
+    @media (max-width: 680px){.foot-grid{grid-template-columns:1fr; gap:.6rem}}
+    .foot-nav{display:flex; gap:1rem; flex-wrap:wrap}
+
+    /* Scroll reveal */
+    [data-reveal]{opacity:0; transform:translateY(12px); transition:opacity .6s ease, transform .6s ease}
+    [data-reveal].visible{opacity:1; transform:none}
+
+    /* Focus styles */
+    :focus-visible{outline:2px solid #ffe08a; outline-offset:2px; border-radius:6px}
+  </style>
 </head>
 <body>
-    <div class="loading-container">
-        <div class="title">Game Update</div>
-        <div class="status-text" id="percentage">0%</div>
-        <div class="progress-bar">
-            <div class="progress" id="progress-bar"></div>
-        </div>
-        <div class="status-text" id="download-status">0/100MB</div>
-        <div class="status-text" id="time-remaining">Time Remaining: Calculating...</div>
-        <div class="status-message" id="status-message">In Progress...</div>
-        <div class="status-text" id="completion-message" style="display: none;">Update Complete!</div>
+  <!-- ================= NAV ================= -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#" aria-label="Magic Egypt Home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name">Magic Egypt</span>
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="#e8dcc5" stroke-width="2" stroke-linecap="round"/></svg>
+        Menu
+      </button>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="tours.html">Tours</a>
+
+      </nav>
     </div>
+  </header>
 
-    <script>
-        let totalSize = 100; // in MB
-        let totalTime = 436; // total time in seconds (1 hour)
-        let updateInterval = totalTime / totalSize; // Calculate time per MB (seconds per MB)
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="overline" data-reveal>Timeless • Authentic • Effortless</span>
+        <h1 class="title" data-reveal style="transition-delay:.08s">Discover Egypt the <em>Magic</em> Way</h1>
+        <p class="lead" data-reveal style="transition-delay:.16s">Bespoke journeys through Cairo, Luxor, Aswan, the Sahara and the Red Sea — wrapped in ancient elegance, delivered with modern comfort.</p>
+        <div class="cta-row" data-reveal style="transition-delay:.24s">
+          <a class="btn" href="tours.html">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" stroke="#2a2217" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Explore Tours
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="scene">
+          <div class="stars"></div>
+          <div class="sun float" aria-hidden="true"></div>
+          <div class="pyramids">
+            <!-- Minimal pyramids scene -->
+            <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="gold" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#e8c983"/>
+                  <stop offset="100%" stop-color="#c7a86d"/>
+                </linearGradient>
+                <linearGradient id="shadow" x1="0" x2="1" y1="0" y2="0">
+                  <stop offset="0%" stop-color="#9b7a3b"/>
+                  <stop offset="100%" stop-color="#5f4b22"/>
+                </linearGradient>
+              </defs>
+              <!-- dunes -->
+              <path d="M0 220 Q 120 180 230 210 T 470 210 T 800 205 L 800 300 L 0 300 Z" fill="#a6854a" opacity=".25"/>
+              <!-- pyramids -->
+              <g class="float" style="animation-duration:7.5s">
+                <path d="M170 210 L260 70 L350 210 Z" fill="url(#gold)"/>
+                <path d="M260 70 L350 210 L260 210 Z" fill="url(#shadow)"/>
+                <path d="M340 210 L480 50 L600 210 Z" fill="url(#gold)"/>
+                <path d="M480 50 L600 210 L480 210 Z" fill="url(#shadow)"/>
+              </g>
+            </svg>
+          </div>
+          <div class="sand"></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        // Retrieve stored progress from localStorage, if any
-        let currentSize = localStorage.getItem('currentSize') ? parseInt(localStorage.getItem('currentSize')) : 0;
-        let progressPercentage = (currentSize / totalSize) * 100;
+  <!-- ================= FEATURES ================= -->
+  <section id="about">
+    <div class="container">
+      <div class="grid cols-3">
+        <article class="card" data-reveal>
+          <div class="icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l9 4-9 4-9-4 9-4zm0 8l9 4-9 4-9-4 9-4zm0 8l9 4-9 4-9-4 9-4z" fill="#351e02"/></svg>
+          </div>
+          <h3>Egyptologists at the Helm</h3>
+          <p>Guides with deep historical expertise and storytelling that brings temples and tombs to life.</p>
+        </article>
+        <article class="card" data-reveal style="transition-delay:.08s">
+          <div class="icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12l7-9 7 9-7 9-7-9z" fill="#351e02"/></svg>
+          </div>
+          <h3>Seamless Logistics</h3>
+          <p>From VIP airport meet & assist to private transfers and priority tickets — you glide, we handle.</p>
+        </article>
+        <article class="card" data-reveal style="transition-delay:.16s">
+          <div class="icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 5v6l5 3" stroke="#351e02" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Your Pace, Your Way</h3>
+          <p>Private, flexible days calibrated for families, photographers, and curious minds alike.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-        // Initialize the page with stored progress (if any)
-        document.getElementById('progress-bar').style.width = progressPercentage + '%';
-        document.getElementById('progress-bar').textContent = progressPercentage + '%';
-        document.getElementById('percentage').textContent = progressPercentage + '%';
-        document.getElementById('download-status').textContent = currentSize + '/' + totalSize + 'MB';
+  $1
 
-        // Status Message: In Progress or Complete
-        if (currentSize < totalSize) {
-            document.getElementById('status-message').textContent = "In Progress...";
-        } else {
-            document.getElementById('status-message').textContent = "Update Complete!";
-            document.getElementById('status-message').classList.add('status-completed');
-            document.getElementById('completion-message').style.display = "block";
-        }
+  <!-- ================= IMAGE GALLERY ================= -->
+  <!-- <section>
+    <div class="container">
+      <h3 class="section-title">Scenes from the Nile & Beyond</h3>
+      <p class="kicker">Cairo • Luxor • Aswan • Red Sea</p>
+      <div class="gallery-grid" style="margin-top:1rem">
+        <figure class="gallery-item tall"><img src="https://media.istockphoto.com/id/1370918272/photo/skyline-over-the-nile-in-cairo-before-sunset-aerial-view-egypt.jpg?s=612x612&w=0&k=20&c=y2crsJybvK2WFNV4Z0Px0jn3moY6ds9ZeUQa3EC-lDY=" alt="Felucca on the Nile at sunset" loading="lazy"><figcaption class="badge">Nile at Sunset</figcaption></figure>
+        <figure class="gallery-item"><img src="" alt="Hieroglyphics on temple walls" loading="lazy"><figcaption class="badge">Ancient Scripts</figcaption></figure>
+        <figure class="gallery-item wide"><img src="https://images.unsplash.com/photo-1578926375605-eaf7559b145d?q=80&w=1600&auto=format&fit=crop" alt="Red Sea reef" loading="lazy"><figcaption class="badge">Red Sea Reefs</figcaption></figure>
+        <figure class="gallery-item"><img src="https://images.unsplash.com/photo-1603295690349-3fdaea16979e?q=80&w=900&auto=format&fit=crop" alt="Abu Simbel statues" loading="lazy"><figcaption class="badge">Abu Simbel</figcaption></figure>
+      </div>
+    </div>
+  </section> -->
 
-        // Function to calculate and display approximate time remaining
-        function updateTimeRemaining() {
-            if (currentSize < totalSize) {
-                let timeElapsed = (currentSize / totalSize) * totalTime;
-                let timeLeft = totalTime - timeElapsed;
-                let approxTimeRemaining = Math.round(timeLeft / 60); // Time in minutes
-                document.getElementById('time-remaining').textContent = 'Time Remaining: ~' + approxTimeRemaining + ' min';
-            }
-        }
+  <!-- ================= TESTIMONIAL ================= -->
+  <section>
+    <div class="container">
+      <div class="card" data-reveal>
+        <p class="quote">“The perfect blend of history and comfort. Our kids loved the treasure‑hunt at Saqqara while we savored a sunset felucca — flawless logistics throughout.”</p>
+        <div style="display:flex; align-items:center; gap:.8rem; margin-top:.6rem">
+          <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=200&auto=format&fit=crop" width="40" height="40" alt="Guest avatar" style="border-radius:50%"/>
+          <span style="color:#e7dbc4">A. Rahman — Nairobi</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        // Update progress function
-        function updateProgress() {
-            if (currentSize < totalSize) {
-                currentSize += 1; // Increment by 1 MB per interval
-                let percentage = Math.round((currentSize / totalSize) * 100);
+  $1
 
-                // Update the progress on the page
-                document.getElementById('progress-bar').style.width = percentage + '%';
-                document.getElementById('progress-bar').textContent = percentage + '%';
-                document.getElementById('percentage').textContent = percentage + '%';
-                document.getElementById('download-status').textContent = currentSize + '/' + totalSize + 'MB';
+  <!-- ================= CONTACT ================= -->
+  <section id="contact">
+    <div class="container contact" data-reveal>
+      <div class="contact-grid">
+        <div>
+          <h3 class="section-title">Contact Magic Egypt</h3>
+          <p>Have dates in mind or just exploring ideas? Send us a note and we’ll reply with tailored suggestions within a business day.</p>
+          <form onsubmit="event.preventDefault(); alert('Thank you! We\'ll be in touch shortly.'); this.reset();" aria-label="Contact form" style="display:grid; gap:.8rem; margin-top:.6rem">
+            <div class="field"><label for="name">Full Name</label><input id="name" name="name" placeholder="Your name" required></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="you@example.com" required></div>
+            <div class="field"><label for="message">Message</label><textarea id="message" name="message" placeholder="Tell us your dates, interests, and party size..."></textarea></div>
+            <button class="btn" type="submit">Send Message</button>
+          </form>
+        </div>
+        <aside class="contact-card">
+          <h4 style="font-family:Cinzel,serif; margin:.2rem 0 .6rem">Direct Lines</h4>
+          <p style="margin:.2rem 0">WhatsApp: <a href="https://wa.me/201001234567" target="_blank" rel="noopener">+20 100 123 4567</a></p>
+          <p style="margin:.2rem 0">Email: <a href="mailto:hello@magicegypt.travel">hello@magicegypt.travel</a></p>
+          <p style="margin:.2rem 0">Hours: Sun–Thu 9:00–18:00 (EET)</p>
+          <div style="height:180px; border-radius:12px; overflow:hidden; margin-top:.8rem; border:1px solid rgba(199,168,109,.25)">
+            <img src="https://images.unsplash.com/photo-1544989164-31dc3c645987?q=80&w=1200&auto=format&fit=crop" alt="Cairo skyline" style="width:100%; height:100%; object-fit:cover" loading="lazy">
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
 
-                // Save current progress to localStorage
-                localStorage.setItem('currentSize', currentSize);
-                updateTimeRemaining(); // Update time remaining display
-            } else {
-                clearInterval(progressInterval);
-                document.getElementById('completion-message').style.display = 'block';
-                document.getElementById('status-message').textContent = 'Update Complete!';
-                document.getElementById('status-message').classList.add('status-completed');
-                localStorage.removeItem('currentSize'); // Clear stored progress after completion
-            }
-        }
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="container foot-grid">
+      <div style="display:flex; align-items:center; gap:.7rem">
+        <span class="brand-mark" aria-hidden="true" style="width:28px; height:28px"></span>
+        <strong>Magic Egypt</strong>
+        <span aria-hidden="true" style="color:var(--muted)">•</span>
+        <span style="color:var(--muted)">Curated private tours across Egypt</span>
+      </div>
+      <nav class="foot-nav" aria-label="Footer">
+        <a href="tours.html">Tours</a>
+        <a href="booking.html">Booking</a>
+        <a href="#about">About</a>
+        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</a>
+      </nav>
+    </div>
+  </footer>
 
-        let progressInterval = setInterval(updateProgress, updateInterval * 1000); // Update every interval
-    </script>
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+    menuBtn?.addEventListener('click',()=>{
+      const open = navLinks.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', String(open));
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('[data-reveal]');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, {threshold: 0.12});
+    revealEls.forEach(el=>io.observe(el));
+
+    // Respect reduced motion
+    const rm = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if(rm.matches){
+      document.querySelectorAll('.float, .stars').forEach(el=>{ el.style.animation='none'; });
+    }
+  </script>
 </body>
 </html>
